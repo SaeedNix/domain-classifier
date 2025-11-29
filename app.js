@@ -922,8 +922,8 @@ function createCategoryButton(title) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const ADMIN_PHONE = "#?#?#?#?#";
-  const ADMIN_PASS_HASH = "#?#?#?#?#";
+  const ADMIN_PHONE = "-538065844";
+  const ADMIN_PASS_HASH = "1509442";
 
   const startSessionBtn = document.getElementById("start-session");
   const phoneRow = document.getElementById("phone-row");
