@@ -1,0 +1,9 @@
+# Data files
+data/data.json
+
+# OS files
+.DS_Store
+Thumbs.db
+.htaccess
+api.php
+

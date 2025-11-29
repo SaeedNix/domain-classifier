@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>طبقه‌بندی دامنه‌ها</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="shortcut icon" href="assets/icons/favicon.png" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header>
+        <div class="brand-block">
+          <div>
+            <img src="assets/icons/logo.png" alt="logo" class="logo-dot" />
+          </div>
+          <div>
+            <h1>Domain Classifier</h1>
+          </div>
+        </div>
+        <div class="session-indicator" id="session-indicator">
+          <div class="session-phone" id="session-phone"> منتظر شروع</div>
+          <div>
+            <img
+              src="assets/icons/logout.png"
+              alt="logout"
+              id="logout-btn"
+              class="logout-btn"
+              title="خروج"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="control-panel">
+          <div class="card" id="auth-card">
+            <div class="input-row" id="phone-row">
+              <input
+                id="phone-input"
+                type="tel"
+                placeholder="0912xxxxxxx"
+                maxlength="11"
+                autocomplete="tel"
+              />
+              <button id="start-session" class="primary">شروع</button>
+            </div>
+            <div class="input-row" id="password-row">
+              <input
+                id="password-input"
+                type="password"
+                placeholder="رمز عبور"
+              />
+              <button id="login-btn" class="primary">ورود</button>
+            </div>
+          </div>
+
+          <div class="card stats-card" id="stats-card">
+            <div>
+              <p class="label">دامنه فعلی</p>
+              <p class="value" id="current-domain">—</p>
+            </div>
+            <div>
+              <p class="label">تعداد بررسی شده</p>
+              <p class="value" id="total-reviewed">0</p>
+            </div>
+            <div>
+              <p class="label">دامنه‌های باقی‌مانده</p>
+              <p class="value" id="remaining-domains">0</p>
+            </div>
+          </div>
+
+          <div class="card category-card">
+            <div class="card-header">
+              <div class="card-title">
+                <h4>دسته‌بندی محتوا</h4>
+                <button id="category-guide-btn" class="category-guide-btn">
+                  <div>راهنما</div>
+                  <div class="info-icon">
+                    <img
+                      src="assets/icons/info.png"
+                      alt="info"
+                      width="17"
+                      height="17"
+                    />
+                  </div>
+                </button>
+              </div>
+
+              <button id="add-category" class="ghost">افزودن دسته</button>
+              <button id="next-domain" class="ghost" disabled>
+                <span class="button-text">سایت بعدی</span>
+                <span class="button-spinner" style="display: none">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
+                    <path d="M12 2 A10 10 0 0 1 22 12" stroke-linecap="round" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+            <div class="category-buttons" id="category-buttons">
+              <div class="full-width-category">
+                <button data-category="غیر کسب و کاری" class="category">
+                  غیر کسب و کاری، تعطیل یا نامشخص
+                </button>
+              </div>
+              <div class="full-width-category">
+                <button data-category="کسب و کاری" class="category">
+                  کسب و کاری، غیر مقیاس پذیر (محلی)
+                </button>
+              </div>
+              <div class="half-width-container">
+                <button data-category="سایت درجه ۳" class="category">
+                  سایت درجه ۳
+                </button>
+                <button data-category="سایت درجه ۲" class="category">
+                  سایت درجه ۲
+                </button>
+              </div>
+              <div class="full-width-category">
+                <button
+                  data-category="سایت درجه ۱"
+                  class="category secondary with-tooltip"
+                >
+                  <span>سایت درجه ۱</span>
+                  <div class="tooltip-container">
+                    <span class="tooltip-icon">?</span>
+                    <div class="tooltip-text">
+                      شرکت‌های بزرگ، کارخانجات، تولیدی‌ها، دانش بنیان و شرکت‌های
+                      خلاق
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card actions-card" id="actions-card">
+            <div class="download-actions">
+              <button id="download-user-json">JSON کاربران</button>
+              <button id="download-user-txt">TXT کاربران</button>
+              <button id="download-global-json">JSON دسته‌ها</button>
+              <button id="download-global-txt">TXT دسته‌ها</button>
+            </div>
+          </div>
+
+          <div class="card history-card">
+            <div class="card-header">
+              <h4>آخرین دامنه‌های شما</h4>
+              <button id="clear-history" class="ghost">پاک‌سازی لیست</button>
+            </div>
+            <ul id="history-list"></ul>
+          </div>
+        </section>
+
+        <section class="preview-panel">
+          <div class="device-toolbar">
+            <div class="device-toggle" id="device-toggle">
+              <button data-mode="mobile" class="active">موبایل</button>
+              <button data-mode="desktop">دسکتاپ</button>
+            </div>
+            <button id="open-in-tab" class="ghost">باز کردن در تب جدید</button>
+          </div>
+
+          <div class="device-frame mobile" id="device-frame">
+            <div class="device-notch"></div>
+            <iframe id="site-frame" title="پیش‌نمایش سایت"></iframe>
+            <div class="frame-overlay" id="frame-overlay">
+              لطفاً ابتدا وارد شوید و سپس دسته‌بندی را شروع کنید.
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          Designed & Developed by
+          <a
+            href="https://github.com/SaeedNix"
+            target="_blank"
+            rel="noopener noreferrer"
+            >SaeedNix</a
+          >
+        </p>
+      </footer>
+    </div>
+    <template id="history-item-template">
+      <li>
+        <div class="history-domain"></div>
+        <div class="history-meta">
+          <span class="history-category"></span>
+          <span class="history-time"></span>
+        </div>
+      </li>
+    </template>
+
+    <!-- <dialog id="category-dialog">
+      <form method="dialog">
+        <h3>افزودن دسته جدید</h3>
+        <label for="new-category-input">عنوان دسته</label>
+        <input id="new-category-input" type="text" maxlength="30" required />
+        <div class="dialog-actions">
+          <button value="cancel" id="cancel-dialog" type="button">
+            انصراف
+          </button>
+          <button value="confirm" type="submit" class="primary">افزودن</button>
+        </div>
+      </form>
+    </dialog> -->
+
+    <div id="toast" class="toast">
+      <p id="toast-text"></p>
+    </div>
+
+    <!-- Guide Modal -->
+    <div id="guide-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>راهنمای دسته‌بندی</h2>
+          <button id="close-guide-modal" class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="accordion">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>غیر کسب و کاری، تعطیل یا نامشخص</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p><div>
+
+                  برخی از سایت ها اصلا باز نمی شوند یا صفحه بارگزاری با محتوی
+                  قدیمی و یا اطلاعات نامرتبط دارند. کلیه سایت های در حال به روز
+                  رسانی و یا سایت هایی که به جای نمایش صفحه اول سایت، به صفحه
+                  لاگین هدایت می شوند در این دسته قرار دارند. 
+                </div><div>
+
+                  دامنه هایی که
+                  بدلیل باطل شدن بر روی صفحات فروش دامنه هدایت شده اند و یا هر
+                  سایت حاوی اطلاعات نامرتبط و منقضی شده در این دسته قرار می
+                  گیرند.
+                </div><div>
+
+                   همچنین سایت های فروش کالاهای غیرمجاز مانند دخانیات،
+                  فروش حیوانات، شرط بندی و سایر امور غیر کسب و کاری در این دسته
+                  قرار می گیرند.
+                </div>
+                <div>
+
+                 کلیه سایت های دولتی، مدارس، سینماها، خانه های
+                  سالمندان، بیمارستان ها، درمانگاه ها، انجمن های صنفی و اتحادیه
+                  ها نیز در این دسته قرار می گیرند. 
+                </div>
+                <div>
+
+                در کل هر سایتی که هدف آن کسب
+                  و کار نیست و وبلاگی و نمایش اطلاعات نیست، نیز در این دسته قرار
+                  می گیرد. کلیه سایت های وبلاگی، مجله های آموزشی، سایت های کنکور
+                  و آموزش دروس، سایت های فروش پکیج یا بسته های آموزشی، سمینارها،
+                  دوره های آموزشی، سایت های اطلاع رسانی و رسانه ها در این دسته
+                  قرار دارند.
+                </div>
+                همچنین کلیه سایت های خبری و خبرگزاری ها و ... نیز
+                  در این دسته قرار می گیرند. اگر هر سایتی به هر دلیلی مشمول کسب
+                  و کار نباشد در این دسته قرار می گیرد.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>کسب و کاری غیر مقیاس پذیر (محلی)</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p><div>
+  بسیاری از سایت ها صرفا ایجاد می شوند تا مکانی برای معرفی به مشتریان محدود یک کسب و کار محلی باشند.
+  به عنوان مثال سایت بیمه عمر گرگان، این کسب و کار صرفا در آن استان است و محلی است.
+  یا مطب دکتر حسین محمدی، در اینجا سایت صرفا یک تابلوی اطلاع رسانی است که اگر بیماری نام دکتر را جستجو کرد، به سایت مراجعه کند و بتواند نوبت رزرو کرده و یا آدرس مطب را مشاهده کند.
+</div>
+<div>
+  لذا بسیاری از سایت ها صرفا یک تابلوی اطلاع رسانی برای کسب و کارهای موجود هستند و به هیچ وجه بنایی جهت توسعه سایت و یا ارتقاء سایت خود و توسعه کسب و کار اینترنتی را ندارند.
+</div>
+<div>
+  بیش از 5 هزار سایت فروش بلیط هواپیما در سراسر وب موجود است، بیش از هزار اپلیکیشن تاکسی آنلاین داریم.
+  پایانه های فروش بلیط هواپیما، اتوبوس و قطار و اغلب سایت های بلیط فروشی و گردشگری در این دسته قرار می گیرند، به واسطه اینکه جز فروش بلیط هیچگونه خلاقیتی ندارند.
+</div>
+<div>
+  بدیهی است که سایت های گردشگری مثل علی بابا، اتاق، سفرمارکت و هتل یار در این دسته قرار نگرفته و در دسته وبسایت های خلاق قرار می گیرند ولی عموم سایت های ساده گردشگری در این دسته قرار می گیرند.
+</div>
+<div>
+  دفاتر مهاجرتی اخذ ویزا نیز در این دسته قرار دارند. مثلا یک آرایشگاه محلی در این دسته قرار می گیرد.
+  سایت های فروش فالوور اینستاگرام و یا خدمات تبلیغاتی نیز در این دسته قرار دارند.
+</div>
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>سایت درجه ۳</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p><div>
+  این سایت ها، سایت هایی هستند که کالا یا خدمات آنها فروش دارد ولی فکر و ایده و هدف منسجمی پشت سایت دیده نمی شود.
+</div>
+<div>
+  مثلا برخی از سایت ها همه مدل کالا یا خدمات را در کنار هم قرار داده و به نوعی همه مدل کالایی می فروشند. انواع کالای سوپرمارکتی را می فروشند.
+</div>
+<div>
+  قریب به اتفاق سایت های لباس فروشی و فروش انواع منسوجات، لپ تاپ و موبایل فروشی ها، گل فروشی ها، غذا فروشی ها، فروشندگان عطر و زیورآلات و کلیه آنلاین شاپ هایی که کالاهای ساده و با فروش بالای تکراری را برای فروش قرار می دهند در دسته سایت های درجه 3 قرار دارند.
+</div>
+<div>
+  مثلا یک سایتی که هم برنامه نویسی وب را انجام می دهد، هم سئو می کند و هم طرح گرافیک است و هم اپلیکیشن طراحی می کند، در دسته سایت های درجه است ولی سایتی که صرفا در حوزه برنامه نویسی نرم افزار تخصصی خودروهای سنگین فعالیت می کند، بدلیل تخصصی بودن در درجه 2 قرار می گیرد.
+</div>
+<div>
+  در کل اینجا برای سایت های آنلاینی است که فروش دارند ولی بازار متوسطی از فروش آنلاین دارند و به حد بالای فروش نرسیده اند و صد البته تخصصی عمل نمی کنند.
+</div></p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>سایت درجه ۲</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>
+                  <div>
+
+                  در اینجا یک ایده منسجم در فروش کالا و خدمات دیده می شود. این
+                  سایت ها اغلب تک محصولی هستند و یا خدمت مشخصی را برای ارائه
+                  قرار داده اند.
+                  </div>
+                  <div>
+
+                  مثلا سایتی که بطور تخصصی لوازم ماهیگیری را برای
+                  فروش قرار داده است یا سایتی که صرفا برای فروش تجهیزات اتاق عمل
+                  است، در این دسته قرار دارند.
+                  </div>
+                  به طور کلی سایت های تک محصولی یا
+                  فروشگاه آنلاین تخصصی و یا تک خدمتی منسجم در این دسته هستند.
+                  برخی از کسب و کارهای این مجموعه ممکن است تا در آینده و با
+                  ایجاد خلاقیت بیشتر یک شرکت خلاق شوند.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>سایت درجه ۱</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>                <div>
+                  شرکت‌های بزرگ، کارخانجات، تولیدی‌ها، دانش بنیان و شرکت‌های خلاق.
+                </div>
+                <div>
+                  شرکت های نوآور یا شرکت های با ابعاد بزرگ در این دسته قرار می گیرند.
+                </div>
+                <div>
+                  البته شرکت های بزرگ و تولیدی های صنعتی نیز در این دسته قرار دارند، حتی اگر سایت متوسطی داشته باشند.
+                </div>
+                <div>
+                  برخی شرکت‌های بزرگ و تولیدی‌های صنعتی ممکن است با وجود ابعاد متوسط خود، نوآوری‌هایی در فرآیندهای تولید، بهره‌وری انرژی، یا توسعه محصولات جدید داشته باشند که آن‌ها را در دسته شرکت‌های دانش بنیان قرار می‌دهد، هرچند سایت یا حضور فیزیکی‌شان کوچک‌تر باشد.
+                </div>
+                <div>
+                  شرکت های صنعتی و تولیدی از بعد توانایی دانش بنیان شدن در این دسته قرار دارند.
+                </div>
+                <div>
+                  از سوی دیگر مساله خلاقیت است. سایتی خلاق است که علاوه بر نوآوری بیش از 60 درصد فروش آن بواسطه خلاقیت نرم افزاری اش باشد.
+                </div>
+                <div>
+                  به عنوان مثال سایتی که موتور جستجوی دندان پزشکان را ارائه کرده و یا سایتی که بتوان به آن لقب استارتاپ را داد در این دسته قرار دارد.
+                </div>
+                <div>
+                  این سایت ها ظاهری شکیل داشته و علاوه بر انسجام و تک محصولی بودن یک ایده شفاف و حرفه ای را دارند.
+                </div>
+                <div>
+                  ایده ای که یک خلق ارزش برای جامعه است. خلاقیتی که در آن متفاوت بودن از لحاظ ارائه خدمات منحصر به فرد در ظاهر سایت نمایان است.
+                </div>
+                <div>
+                  در کل، معیارهای اصلی برای قرار گرفتن در این دسته، میزان نوآوری، تاثیرگذاری، و توانایی ایجاد تغییرات در بازار است.
+                </div></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js?v=2" type="module"></script>
+  </body>
+</html>
