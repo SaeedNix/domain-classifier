@@ -3,7 +3,7 @@
 A high-performance, single-page domain classification tool with live iframe preview — built entirely with **vanilla JavaScript, CSS3, and minimal PHP**. Zero external dependencies.
 
 ![DomainClassifier](Screenshot.png)
-_Live demo available privately upon request_
+**Live demo**: https://domain-classifier.vercel.app/
 
 ## Features
 
