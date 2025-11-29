@@ -3,7 +3,8 @@
 A high-performance, single-page domain classification tool with live iframe preview — built entirely with **vanilla JavaScript, CSS3, and minimal PHP**. Zero external dependencies.
 
 ![DomainClassifier](Screenshot.png)
-**Live demo**: https://domain-classifier.vercel.app
+
+## [Live demo](https://domain-classifier.vercel.app)
 
 **Test as regular user**  
 → Enter any valid 11-digit Iranian mobile number (e.g., `09123456789`)
