@@ -194,7 +194,8 @@ input {
 button {
   border: none;
   border-radius: 12px;
-  padding: 10px 16px;
+  padding: 0.4rem 0.7rem;
+
   font-size: 14px;
   font-weight: 600;
   font-family: "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont,
@@ -615,7 +616,7 @@ button.secondary {
 
 .device-toggle button {
   border-radius: 18px;
-  padding: 8px 18px;
+  padding: 0.4rem 0.7rem;
   background: transparent;
 }
 
@@ -627,13 +628,12 @@ button.secondary {
 .device-frame {
   background: var(--panel);
   border-radius: 18px;
-  border: 12px solid #0f172a;
   position: relative;
   padding: 12px;
   box-shadow: 0 20px 50px rgba(2, 6, 23, 0.8);
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
+  overflow: hidden; /* اضافه شد */
 }
 
 .device-frame.mobile {
@@ -655,7 +655,6 @@ button.secondary {
 
 .device-notch {
   position: absolute;
-  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   width: 120px;
@@ -688,23 +687,23 @@ iframe {
 /* Firefox fallback - use transform but compensate width/height */
 @-moz-document url-prefix() {
   iframe {
-    width: 117.65%; /* Compensate for scale(0.85) */
-    height: 117.65%;
-    zoom: 1;
-    -moz-transform: scale(0.85);
-    transform: scale(0.85);
-    -moz-transform-origin: top left;
+    width: 100% !important;
+    height: 100% !important;
+    /* -moz-transform: scale(0.85); */
+    /* transform: scale(0.85); */
+    /* -moz-transform-origin: top left; */
     transform-origin: top left;
+    background: transparent;
   }
 
   .device-frame.desktop iframe {
-    width: 133.33%; /* Compensate for scale(0.75) */
-    height: 133.33%;
-    zoom: 1;
-    -moz-transform: scale(0.75);
-    transform: scale(0.75);
-    -moz-transform-origin: top left;
+    width: 100% !important;
+    height: 100% !important;
+    /* -moz-transform: scale(0.75); */
+    /* transform: scale(0.75); */
+    /* -moz-transform-origin: top left; */
     transform-origin: top left;
+    background: transparent;
   }
 }
 
